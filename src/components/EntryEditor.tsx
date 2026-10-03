@@ -107,14 +107,12 @@ export function EntryEditor({
       ) : null}
 
       {kind === 'skills' ? (
-        <Text
+        <LocalizedField
           label="Items (comma separated)"
-          value={entry.tags.join(', ')}
-          onChange={(v) =>
-            mutate((e) => {
-              e.tags = v.split(',').map((x) => x.trim())
-            })
-          }
+          value={entry.summary}
+          lang={lang}
+          onChange={(v) => mutate((e) => void (e.summary = v))}
+          placeholder={{ en: 'Python, Docker, Linux', no: 'Python, Docker, Linux' }}
         />
       ) : (
         <>

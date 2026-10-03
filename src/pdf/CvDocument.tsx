@@ -49,8 +49,10 @@ function makeStyles(theme: Theme) {
       color: accent,
       marginTop: 4,
     },
-    contact: { fontSize: fs * 0.92, lineHeight: lh, color: MUTED, marginTop: 6 },
-    contactLink: { color: MUTED, textDecoration: 'none' },
+    contact: { flexDirection: 'row', flexWrap: 'wrap', marginTop: 6 },
+    contactItem: { flexDirection: 'row' },
+    contactText: { fontSize: fs * 0.92, lineHeight: lh, color: MUTED, textDecoration: 'none' },
+    contactSep: { fontSize: fs * 0.92, lineHeight: lh, color: RULE, paddingHorizontal: 7 },
     headerRule: { borderBottomWidth: 1.2, borderBottomColor: accent, marginTop: 10 },
     summary: { fontSize: fs, lineHeight: lh, marginTop: 10 },
 
@@ -111,21 +113,24 @@ function ContactLine({ cv, lang, s }: { cv: CV; lang: Lang; s: Styles }) {
     if (value) parts.push({ text: value.replace(/^https?:\/\//i, ''), link: href(value, 'web') })
   }
   if (parts.length === 0) return null
+  // A wrapping row rather than one long string: each item carries its own
+  // leading separator inside an atomic cell, so a contact line too long for one
+  // line breaks *between* items and never strands a separator at a line end.
   return (
-    <Text style={s.contact}>
+    <View style={s.contact}>
       {parts.map((part, i) => (
-        <Text key={i}>
-          {i > 0 ? '   ·   ' : ''}
+        <View key={i} style={s.contactItem} wrap={false}>
+          {i > 0 ? <Text style={s.contactSep}>·</Text> : null}
           {part.link ? (
-            <Link src={part.link} style={s.contactLink}>
+            <Link src={part.link} style={s.contactText}>
               {part.text}
             </Link>
           ) : (
-            part.text
+            <Text style={s.contactText}>{part.text}</Text>
           )}
-        </Text>
+        </View>
       ))}
-    </Text>
+    </View>
   )
 }
 
@@ -170,12 +175,15 @@ function DatedEntry({ entry, lang, s }: { entry: Entry; lang: Lang; s: Styles })
 
 function SkillEntry({ entry, lang, s }: { entry: Entry; lang: Lang; s: Styles }) {
   const label = t(entry.role, lang)
-  const items = entry.tags.map((x) => x.trim()).filter(Boolean).join(', ')
-  const fallback = t(entry.summary, lang)
+  // Skill items are translated (stored in `summary`), because lists like
+  // "Serverdrift" or "Norsk, Engelsk" differ per language. `tags` is kept as a
+  // fallback so entries written before items were translatable still render.
+  const translated = t(entry.summary, lang)
+  const shared = entry.tags.map((x) => x.trim()).filter(Boolean).join(', ')
   return (
     <View style={s.skillRow} wrap={false}>
       <Text style={s.skillLabel}>{label}</Text>
-      <Text style={s.skillItems}>{items || fallback}</Text>
+      <Text style={s.skillItems}>{translated || shared}</Text>
     </View>
   )
 }
