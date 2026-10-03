@@ -70,7 +70,9 @@ src/
   types.ts              data model (Loc = {en, no})
   i18n.ts               UI labels, date formatting, default section titles
   store.ts              localStorage persistence, undo, JSON normalisation
-  sample.ts             starter CV and default theme
+  sample.ts             blank CV and default theme
   pdf/CvDocument.tsx    the PDF — this is both preview and download
   components/           editor form, live preview pane, style controls
+CVs/
+  example.json          starter CV shown on first run; keep your own CVs here
 ```
