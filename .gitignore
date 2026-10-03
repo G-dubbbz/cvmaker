@@ -4,3 +4,4 @@ dist
 *.local
 *.tsbuildinfo
 CVs/*
+!CVs/example.json
