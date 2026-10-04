@@ -49,7 +49,9 @@ verbatim, so `Summer 2024` works too.
 ## Document style
 
 Accent colour, serif or sans typeface, body size, line height, and page margins
-are adjustable at the bottom of the editor, with optional page numbers. Output is
+are adjustable at the bottom of the editor, with optional page numbers. Web
+links in the header show as short clickable labels (`LinkedIn`, `GitHub`, the
+website's domain) unless you switch back to full URLs. Output is
 A4 with selectable, searchable text and live links — not an image.
 
 ## Layout notes
