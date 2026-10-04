@@ -8,6 +8,7 @@ export const defaultTheme = (): CV['theme'] => ({
   lineHeight: 1.35,
   margin: 44,
   showPageNumbers: false,
+  shortLinks: true,
 })
 
 export function blankCv(): CV {

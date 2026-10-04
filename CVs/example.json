@@ -134,6 +134,7 @@
     "fontSize": 10,
     "lineHeight": 1.35,
     "margin": 44,
-    "showPageNumbers": false
+    "showPageNumbers": false,
+    "shortLinks": true
   }
 }
