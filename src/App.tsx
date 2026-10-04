@@ -4,7 +4,7 @@ import { Preview } from './components/Preview.tsx'
 import { SectionEditor } from './components/SectionEditor.tsx'
 import { ThemePanel } from './components/ThemePanel.tsx'
 import { KIND_LABEL, LANG_LABEL, SECTION_TITLES } from './i18n.ts'
-import { blankCv, sampleCv } from './sample.ts'
+import { blankCv } from './sample.ts'
 import { move, normalize, useCvStore } from './store.ts'
 import type { Lang, SectionKind } from './types.ts'
 import { LANGS, newSection } from './types.ts'
@@ -17,6 +17,11 @@ const ADDABLE: SectionKind[] = [
   'skills',
   'text',
 ]
+
+type OpenFilePicker = (options: {
+  id: string
+  types: { description: string; accept: Record<string, string[]> }[]
+}) => Promise<{ getFile(): Promise<File> }[]>
 
 export default function App() {
   const { cv, update, replace, undo, canUndo } = useCvStore()
@@ -33,6 +38,28 @@ export default function App() {
     a.download = `${name}.cv.json`
     a.click()
     setTimeout(() => URL.revokeObjectURL(url), 4000)
+  }
+
+  /**
+   * Chromium remembers the last directory per picker `id`, so after the first
+   * pick the dialog reopens in ./CVs/. A page cannot name a path itself, and
+   * browsers without the picker API fall back to the plain file input.
+   */
+  async function openJson() {
+    const pick = (window as unknown as { showOpenFilePicker?: OpenFilePicker }).showOpenFilePicker
+    if (!pick) {
+      fileInput.current?.click()
+      return
+    }
+    try {
+      const [handle] = await pick({
+        id: 'cvs',
+        types: [{ description: 'CV JSON', accept: { 'application/json': ['.json'] } }],
+      })
+      void importJson(await handle.getFile())
+    } catch {
+      // Dialog dismissed.
+    }
   }
 
   async function importJson(file: File) {
@@ -71,7 +98,7 @@ export default function App() {
         <button type="button" onClick={exportJson}>
           Export JSON
         </button>
-        <button type="button" onClick={() => fileInput.current?.click()}>
+        <button type="button" onClick={() => void openJson()}>
           Import JSON
         </button>
         <input
@@ -92,14 +119,6 @@ export default function App() {
           }}
         >
           Clear
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            if (confirm('Replace everything with the example CV?')) replace(sampleCv())
-          }}
-        >
-          Load example
         </button>
       </header>
 

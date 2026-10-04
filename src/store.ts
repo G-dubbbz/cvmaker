@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { defaultTheme, sampleCv } from './sample.ts'
+import example from '../CVs/example.json'
+import { defaultTheme } from './sample.ts'
 import type { CV, Entry, Section } from './types.ts'
 
 const KEY = 'cvmaker:cv:v1'
@@ -60,9 +61,10 @@ function load(): CV {
     const stored = localStorage.getItem(KEY)
     if (stored) return normalize(JSON.parse(stored))
   } catch {
-    // Corrupt or unreadable storage: fall through to the sample CV.
+    // Corrupt or unreadable storage: fall through to the example CV.
   }
-  return sampleCv()
+  // Shown on first run so the preview is never an empty page.
+  return normalize(example)
 }
 
 export interface Store {
