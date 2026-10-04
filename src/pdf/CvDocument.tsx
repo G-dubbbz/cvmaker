@@ -145,7 +145,7 @@ function ContactLine({ cv, lang, s }: { cv: CV; lang: Lang; s: Styles }) {
       {parts.map((part, i) => (
         <View key={i} style={s.contactItem} wrap={false}>
           {i > 0 ? <Text style={s.contactSep}>·</Text> : null}
-          {part.link && part.icon ? (
+          {short && part.link && part.icon ? (
             <Link src={part.link} style={s.contactIconLink}>
               <Svg viewBox="0 0 24 24" style={s.contactIcon}>
                 <Path d={part.icon} fill={MUTED} />
