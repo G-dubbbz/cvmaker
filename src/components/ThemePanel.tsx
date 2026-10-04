@@ -99,7 +99,7 @@ export function ThemePanel({
             checked={theme.shortLinks}
             onChange={(e) => mutate((t) => void (t.shortLinks = e.target.checked))}
           />
-          Short link labels (LinkedIn, GitHub) instead of full URLs
+          Short link labels (website domain, LinkedIn, GitHub) instead of full URLs
         </label>
       </div>
     </section>
